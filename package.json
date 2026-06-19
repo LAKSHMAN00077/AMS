@@ -1,0 +1,25 @@
+{
+  "name": "ams",
+  "version": "0.1.0",
+  "private": true,
+  "description": "AMS monorepo — React frontend and Node.js backend",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "npm run dev --workspaces --if-present",
+    "dev:frontend": "npm run dev -w @ams/frontend",
+    "dev:backend": "npm run dev -w @ams/backend",
+    "build": "npm run build --workspaces --if-present",
+    "build:frontend": "npm run build -w @ams/frontend",
+    "build:backend": "npm run build -w @ams/backend",
+    "lint": "npm run lint --workspaces --if-present",
+    "test": "npm run test --workspaces --if-present",
+    "clean": "npm run clean --workspaces --if-present && rm -rf node_modules"
+  },
+  "engines": {
+    "node": ">=20.0.0",
+    "npm": ">=10.0.0"
+  }
+}
