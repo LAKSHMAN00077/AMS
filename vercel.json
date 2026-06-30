@@ -1,10 +1,11 @@
 {
+  "installCommand": "npm install",
   "buildCommand": "npm run build -w @ams/frontend",
   "outputDirectory": "apps/frontend/dist",
   "rewrites": [
     {
       "source": "/api/:path*",
-      "destination": "https://https://ams-b7gb.onrender.com/api/:path*"
+      "destination": "https://ams-b7gb.onrender.com/api/:path*"
     }
   ]
 }
