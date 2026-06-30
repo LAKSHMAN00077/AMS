@@ -15,10 +15,10 @@ attendanceRouter.post("/attendance", async (req: Request, res: Response) => {
     if (!PERIODS.includes(period)) {
       return res.status(400).json({ success: false, error: "Invalid period" });
     }
-    // const today = new Date(); today.setHours(0,0,0,0);
-    // if (new Date(date + "T00:00:00") > today) {
-    //   return res.status(400).json({ success: false, error: "Date cannot be in the future" });
-    // }
+    const today = new Date(); today.setHours(0,0,0,0);
+    if (new Date(date + "T00:00:00") > today) {
+      return res.status(400).json({ success: false, error: "Date cannot be in the future" });
+    }
 
     const tab = classTab(cls);
     if (!tab) return res.status(400).json({ success: false, error: `Unknown class ${cls}` });
