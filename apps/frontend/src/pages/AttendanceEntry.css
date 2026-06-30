@@ -1,4 +1,4 @@
-.app {
+.attendance-page {
   width: min(100%, 460px);
   margin: 0 auto;
   padding: 3rem 1rem;
@@ -146,7 +146,7 @@ button:disabled {
 }
 
 @media (max-width: 420px) {
-  .app {
+  .attendance-page {
     padding: 1rem;
   }
 

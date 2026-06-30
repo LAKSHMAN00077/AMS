@@ -3,6 +3,7 @@ import cors from 'cors';
 import express from 'express';
 import type { HealthResponse } from '@ams/shared';
 import { apiRouter } from './routes/index.js';
+import attendanceRouter from './routes/attendance.js';
 
 const app = express();
 const PORT = Number(process.env.PORT) || 3000;
@@ -21,6 +22,8 @@ app.get('/health', (_req, res) => {
 });
 
 app.use('/api', apiRouter);
+
+app.use('/api', attendanceRouter);
 
 app.listen(PORT, () => {
   console.log(`AMS backend listening on http://localhost:${PORT}`);
