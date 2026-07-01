@@ -30,6 +30,7 @@ function AttendanceEntry() {
   const [date, setDate] = useState('2026-07-01');
   const [period, setPeriod] = useState('P4');
   const [absentInput, setAbsentInput] = useState('');
+  const [attendanceType, setAttendanceType] = useState('absent');
   const [saveState, setSaveState] = useState<SaveState>({
     type: 'idle',
     message: 'Ready to save attendance.',
@@ -52,6 +53,7 @@ function AttendanceEntry() {
           class: selectedClass,
           date,
           period,
+          attendanceType,
           absentRolls,
         }),
       });
@@ -63,8 +65,13 @@ function AttendanceEntry() {
 
       setSaveState({
         type: 'success',
-        message: `Saved attendance with ${data.absentCount ?? absentRolls.length} absentees.`,
+        message: `Saved attendance with ${data.absentCount ?? absentRolls.length} ${
+          attendanceType === "absent" ? "absentees" : "presents"
+        }.`,
       });
+
+      setAbsentInput('');
+
     } catch (error) {
       setSaveState({
         type: 'error',
@@ -73,7 +80,6 @@ function AttendanceEntry() {
     } finally {
       setIsSaving(false);
     }
-    setAbsentInput('');
   }
 
   return (
@@ -126,18 +132,47 @@ function AttendanceEntry() {
           </label>
         </section>
 
+        <div className="attendance-type" aria-label="Attendance entry type">
+          <label className="attendance-option">
+            <input
+              type="radio"
+              value="absent"
+              checked={attendanceType === "absent"}
+              onChange={(e) => setAttendanceType(e.target.value)}
+            />
+            Absentees
+          </label>
+
+          <label className="attendance-option">
+            <input
+              type="radio"
+              value="present"
+              checked={attendanceType === "present"}
+              onChange={(e) => setAttendanceType(e.target.value)}
+            />
+            Presents
+          </label>
+
+        </div>
+
         <label className="roll-field">
-          <span>Absent roll numbers</span>
+          <span>
+            {attendanceType === "absent" ? "Absent Roll Numbers" : "Present Roll Numbers"}
+          </span>
           <textarea
             value={absentInput}
             onChange={(event) => setAbsentInput(event.target.value)}
-            placeholder="4, 17, 23"
+            placeholder={
+              attendanceType === "absent"
+                ? "4, 17, 23"
+                : "1, 2, 3, 4"
+            }
             rows={4}
           />
         </label>
 
         <div className="count-row">
-          <span>Absentees</span>
+          <span>{attendanceType === "absent" ? "Absentees" : "Presents"}</span>
           <strong>{absentRolls.length}</strong>
         </div>
 

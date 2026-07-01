@@ -87,6 +87,55 @@ textarea:focus {
   padding: 0 1.35rem 1rem;
 }
 
+.attendance-type {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.65rem;
+  margin: 0 1.35rem 1.1rem;
+  padding: 0.35rem;
+  border: 1px solid #d7dde8;
+  border-radius: 8px;
+  background: #f8fafc;
+}
+
+.attendance-option {
+  position: relative;
+  display: flex;
+  min-height: 2.55rem;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  color: #475467;
+  font-size: 0.92rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 160ms ease, border-color 160ms ease, color 160ms ease, box-shadow 160ms ease;
+}
+
+.attendance-option input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  border: 0;
+}
+
+.attendance-option:has(input:checked) {
+  border-color: #1f3b73;
+  background: #ffffff;
+  color: #172033;
+  box-shadow: 0 8px 20px rgba(31, 59, 115, 0.14);
+}
+
+.attendance-option:has(input:focus-visible) {
+  outline: 3px solid rgba(37, 99, 235, 0.18);
+  outline-offset: 2px;
+}
+
 .count-row {
   display: flex;
   align-items: center;
