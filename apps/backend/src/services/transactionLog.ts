@@ -44,33 +44,43 @@ export interface TransactionLogData {
 export async function appendTransactionLog(
   data: TransactionLogData
 ) {
-  const spreadsheetId = getRequiredEnv(
-    "TRANSACTION_LOG_SPREADSHEET_ID"
-  );
+  console.log("===== Transaction Log Function Called =====");
+  console.log(data);
+  try {
+    const spreadsheetId = getRequiredEnv(
+      "TRANSACTION_LOG_SPREADSHEET_ID"
+    );
 
-  const row = [
-    generateTxnId(),
-    getTimestamp(),
-    data.year,
-    data.className,
-    data.date,
-    data.period,
-    data.absentRolls.join(","),
-    data.absentRolls.length,
-    data.status,
-    data.message,
-  ];
+    const row = [
+      generateTxnId(),
+      getTimestamp(),
+      data.year,
+      data.className,
+      data.date,
+      data.period,
+      data.absentRolls.join(","),
+      data.absentRolls.length,
+      data.status,
+      data.message,
+    ];
 
-  await sheets.spreadsheets.values.append({
-    spreadsheetId,
-    range: "TransactionLog!A:J",
+    await sheets.spreadsheets.values.append({
+      spreadsheetId,
+      range: "TransactionLog!A:J",
 
-    valueInputOption: "RAW",
+      valueInputOption: "RAW",
 
-    insertDataOption: "INSERT_ROWS",
+      insertDataOption: "INSERT_ROWS",
 
-    requestBody: {
-      values: [row],
-    },
-  });
+      requestBody: {
+        values: [row],
+      },
+    });
+
+    console.log("Transaction logged successfully.");
+  } catch (err) {
+    console.error("Failed to write TransactionLog:", err);
+    // Don't throw the error.
+    // Attendance should continue even if logging fails.
+  }
 }
