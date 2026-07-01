@@ -12,26 +12,32 @@ function getRequiredEnv(name: string): string {
 
 function normalizePrivateKey(value: string): string {
   const trimmed = value.trim();
+
   const unquoted =
     (trimmed.startsWith("\"") && trimmed.endsWith("\"")) ||
     (trimmed.startsWith("'") && trimmed.endsWith("'"))
       ? trimmed.slice(1, -1)
       : trimmed;
+
   const key = unquoted.replace(/\\n/g, "\n").trim();
-  const match = key.match(/^-----BEGIN ([A-Z ]*PRIVATE KEY)-----\s*([\s\S]*?)\s*-----END \1-----$/);
+
+  const match = key.match(
+    /^-----BEGIN ([A-Z ]*PRIVATE KEY)-----\s*([\s\S]*?)\s*-----END \1-----$/
+  );
 
   if (!match) {
     return key;
   }
 
   const [, label, body] = match;
+
   const normalizedBody = body.replace(/\s+/g, "");
-  const wrappedBody = normalizedBody.match(/.{1,64}/g)?.join("\n") ?? normalizedBody;
+
+  const wrappedBody =
+    normalizedBody.match(/.{1,64}/g)?.join("\n") ?? normalizedBody;
 
   return `-----BEGIN ${label}-----\n${wrappedBody}\n-----END ${label}-----\n`;
 }
-
-// const spreadsheetId = getRequiredEnv("ATTENDANCE_SPREADSHEET_ID");
 
 function getSpreadsheetId(year: string): string {
   switch (year) {
@@ -47,7 +53,6 @@ function getSpreadsheetId(year: string): string {
     case "4th Year":
       return getRequiredEnv("E4_ATTENDANCE_SPREADSHEET_ID");
 
-
     default:
       throw new Error(`No spreadsheet configured for ${year}`);
   }
@@ -56,10 +61,13 @@ function getSpreadsheetId(year: string): string {
 const auth = new google.auth.JWT({
   email: getRequiredEnv("GOOGLE_CLIENT_EMAIL"),
   key: normalizePrivateKey(getRequiredEnv("GOOGLE_PRIVATE_KEY")),
-  scopes: ["https://www.googleapis.com/auth/spreadsheets"]
+  scopes: ["https://www.googleapis.com/auth/spreadsheets"],
 });
 
-const sheets = google.sheets({ version: "v4", auth });
+export const sheets = google.sheets({
+  version: "v4",
+  auth,
+});
 
 export async function getValues(
   year: string,
@@ -91,8 +99,7 @@ export async function setColumn(
     range,
     valueInputOption: "RAW",
     requestBody: {
-      values: values.map(v => [v]),
+      values: values.map((v) => [v]),
     },
   });
 }
-

@@ -7,7 +7,7 @@ const PERIODS = ["P1","P2","P3","P4","P5","P6","P7"];
 
 attendanceRouter.post("/attendance", async (req: Request, res: Response) => {
   try {
-    const { year, class: cls, date, period, attendanceType, absentRolls } = req.body;
+    const { year, class: cls, date, period, absentRolls } = req.body;
 
     if (!year || !cls || !date || !period || !Array.isArray(absentRolls)) {
       return res.status(400).json({ success: false, error: "Missing required fields" });
@@ -44,11 +44,6 @@ if (!col) return res.status(400).json({ success: false, error: "Date/period not 
     const marks = rolls.map((r: any) => {
       const roll = Number(r[0]);
       if (!roll) return "";
-
-      if(attendanceType === "present") {
-        return uniqueAbsent.includes(roll) ? "P" : "A";
-      }
-
       return uniqueAbsent.includes(roll) ? "A" : "P";
     });
     await setColumn(year, `${tab}!${col}4:${col}${rolls.length + 3}`, marks);
